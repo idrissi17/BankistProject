@@ -5,7 +5,7 @@
 // Data
 const account1 = {
   owner: "Jonas Schmedtmann",
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
   interestRate: 1.2, // %
 
   movementsDates: [
@@ -132,7 +132,7 @@ const displayMovements = function (movements, sort = false) {
     const movement = ` 
     <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
-    <div class="movements__value">${mov}€</div>
+    <div class="movements__value">${mov.toFixed(2)}€</div>
   </div>
   `;
     containerMovements.insertAdjacentHTML("afterbegin", movement);
@@ -144,25 +144,25 @@ const calcPrintBalance = function (account) {
     (acc, movement) => acc + movement,
     0
   );
-  labelBalance.textContent = `${account.balance}€`;
+  labelBalance.textContent = `${account.balance.toFixed(2)}€`;
 };
 
 const displaySummary = function (account) {
   const valueIn = account.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${valueIn}€`;
+  labelSumIn.textContent = `${valueIn.toFixed(2)}€`;
   const valueOUt = account.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(valueOUt)}€`;
+  labelSumOut.textContent = `${Math.abs(valueOUt.toFixed(2))}€`;
 
   const interest = account.movements
     .filter((mov) => mov > 0)
     .map((mov) => (mov * account.interestRate) / 100)
     .reduce((acc, mov) => acc + mov, 0);
 
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const createUsernames = function (accs) {
@@ -229,7 +229,7 @@ btnTransfer.addEventListener("click", (e) => {
 });
 btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
   if (
     amount > 0 &&
     currentAccount.movements.some((mov) => mov >= amount * 0.1)
